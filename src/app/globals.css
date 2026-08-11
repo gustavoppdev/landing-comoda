@@ -13,6 +13,31 @@
     max-width: 1040px;
     padding-inline: clamp(22px, 5vw, 56px);
   }
+
+  /* ── Hero (plan.md §1.2 e §2) ───────────────────────────────────────────
+     O hero tem padding vertical próprio: pouco no topo (o wordmark quase
+     encosta na borda) e mais na base (o bloco de texto respira sobre o
+     gradiente). Não é o `clamp(72px,10vw,124px)` das demais seções. */
+  .hero-shell {
+    padding-block: clamp(20px, 4vw, 34px) clamp(40px, 6vw, 68px);
+  }
+
+  /* Escurecimento FUNCIONAL sobre a IMG-01 — é o que garante o AA do texto
+     branco (plan.md §2, spec.md §4). Mora aqui e não no JSX porque um
+     `bg-[linear-gradient(...)]` seria cor solta fora do bloco de tokens
+     (AGENTS.md §4).
+
+     ATENÇÃO — condição C3 do tasks.md: com a IMG-01 atual este gradiente NÃO
+     fecha o AA (H1 mede 1.0–1.7:1). O valor abaixo é o registrado no plano; a
+     correção é decisão do Gustavo e não foi aplicada aqui. */
+  .hero-scrim {
+    background: linear-gradient(
+      to top,
+      rgba(24, 26, 29, 0.74),
+      rgba(24, 26, 29, 0.28) 46%,
+      rgba(24, 26, 29, 0)
+    );
+  }
 }
 
 /* ── Escala tipográfica (plan.md §1.3) ────────────────────────────────────

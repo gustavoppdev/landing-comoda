@@ -13,13 +13,14 @@ import { Footer } from "@/components/sections/Footer";
  * Esqueleto da página — a ordem de spec.md §3, sem estilo.
  *
  * Não há `<header>`: o wordmark do hero é texto dentro da `<section>`, não
- * navegação (AGENTS.md §3.3). O espaçamento abaixo existe só para as seções não
- * colarem umas nas outras; cada slice de conteúdo traz o seu.
+ * navegação (AGENTS.md §3.3). O `<main>` não tem padding nem gap: o fundo de
+ * cada seção é full-bleed (plan.md §2) e o espaçamento vertical é de cada uma
+ * delas. As seções ainda cruas ficam encostadas até a slice que as pega.
  */
 export default function Home() {
   return (
     <>
-      <main className="flex flex-col gap-8 p-6">
+      <main>
         <Hero />
         <Manifesto />
         <Problem />
