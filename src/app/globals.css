@@ -4,6 +4,108 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── Largura de leitura (plan.md §1.2) ────────────────────────────────────
+   Wrapper INTERNO de cada seção: o fundo continua full-bleed na <section>,
+   só o conteúdo é limitado — é o que preserva o ritmo de faixas de plan.md §2. */
+@layer utilities {
+  .section-container {
+    @apply mx-auto w-full;
+    max-width: 1040px;
+    padding-inline: clamp(22px, 5vw, 56px);
+  }
+}
+
+/* ── Escala tipográfica (plan.md §1.3) ────────────────────────────────────
+   Sufixo -lg = desktop; sem sufixo = mobile. Uso no JSX: `text-h1 md:text-h1-lg`.
+   Bloco próprio porque o `@theme inline` do preset não se edita. */
+@theme {
+  --text-h1: 2.25rem; /* 36px */
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.015em;
+  --text-h1-lg: 3.875rem; /* 62px */
+  --text-h1-lg--line-height: 1.08;
+  --text-h1-lg--letter-spacing: -0.015em;
+
+  --text-h2: 1.625rem; /* 26px */
+  --text-h2--line-height: 1.18;
+  --text-h2-lg: 2.375rem; /* 38px */
+  --text-h2-lg--line-height: 1.18;
+
+  /* Manifesto e CTA final têm H2 próprio — plan.md §1.3 */
+  --text-h2-manifesto: 1.5625rem; /* 25px */
+  --text-h2-manifesto--line-height: 1.28;
+  --text-h2-manifesto--letter-spacing: -0.005em;
+  --text-h2-manifesto-lg: 2.625rem; /* 42px */
+  --text-h2-manifesto-lg--line-height: 1.28;
+  --text-h2-manifesto-lg--letter-spacing: -0.005em;
+
+  --text-h2-cta: 1.75rem; /* 28px */
+  --text-h2-cta--line-height: 1.18;
+  --text-h2-cta-lg: 2.875rem; /* 46px */
+  --text-h2-cta-lg--line-height: 1.18;
+
+  --text-h3: 1.1875rem; /* 19px */
+  --text-h3--line-height: 1.3;
+  --text-h3-lg: 1.5rem; /* 24px */
+  --text-h3-lg--line-height: 1.3;
+
+  --text-lead: 0.9375rem; /* 15px */
+  --text-lead--line-height: 1.6;
+  --text-lead--font-weight: 300;
+  --text-lead-lg: 1.0625rem; /* 17px */
+  --text-lead-lg--line-height: 1.6;
+  --text-lead-lg--font-weight: 300;
+
+  --text-body: 0.875rem; /* 14px — piso de legibilidade no mobile */
+  --text-body--line-height: 1.65;
+  --text-body--font-weight: 300;
+  --text-body-lg: 1rem; /* 16px */
+  --text-body-lg--line-height: 1.65;
+  --text-body-lg--font-weight: 300;
+
+  /* Rótulos de seção: mesmo tamanho em mobile e desktop, sem par -lg */
+  --text-label: 0.6875rem; /* 11px */
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.24em;
+  --text-label--font-weight: 400;
+
+  --text-stat: 2.375rem; /* 38px */
+  --text-stat--line-height: 1;
+  --text-stat-lg: 3.625rem; /* 58px */
+  --text-stat-lg--line-height: 1;
+
+  --text-wordmark: 0.9375rem; /* 15px */
+  --text-wordmark--letter-spacing: 0.42em;
+  --text-wordmark-lg: 1.125rem; /* 18px */
+  --text-wordmark-lg--letter-spacing: 0.42em;
+
+  --text-quote: 1.1875rem; /* 19px */
+  --text-quote--line-height: 1.45;
+  --text-quote-lg: 1.625rem; /* 26px */
+  --text-quote-lg--line-height: 1.45;
+
+  --text-price: 1.125rem; /* 18px */
+  --text-price-lg: 1.375rem; /* 22px */
+
+  /* Faixa de preço do hero — peso menor que a subheadline (spec.md §1, exceção 2) */
+  --text-price-tag: 0.6875rem; /* 11px */
+  --text-price-tag--letter-spacing: 0.14em;
+  --text-price-tag--font-weight: 400;
+
+  /* Texto do CTA — plan.md §1.3, idêntico em mobile e desktop */
+  --text-cta: 0.9375rem; /* 15px */
+  --text-cta--line-height: 1;
+  --text-cta--font-weight: 500;
+}
+
+/* Nomes que precisam apontar para variáveis definidas fora do tema (o
+   `--font-display` vem do next/font no <html>), por isso `inline`. Este bloco é
+   nosso; o `@theme inline` do preset, logo abaixo, fica intocado. */
+@theme inline {
+  --font-display: var(--font-display);
+  --color-border-warm: var(--border-warm);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -115,6 +217,36 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* ── Tokens de marca (plan.md §2) ─────────────────────────────────────────
+   Segundo `:root`, colado DEPOIS do que o `init` gerou: o último valor de cada
+   propriedade vence, e o que este bloco não toca fica no default do preset.
+   Só entra aqui o que SUBSTITUI um default — `--background` (branco), `--input`,
+   `--ring`, `--destructive`, `--popover`, `--chart-*` e `--sidebar-*` seguem
+   como estavam. Dark mode não é suportado: o `.dark` acima fica intocado. */
+:root {
+  --radius: 0.25rem; /* 4px — mídia. O botão é rounded-full */
+
+  --foreground: oklch(0.243 0.005 95); /* #23231F */
+
+  /* Faixa de fundo creme — a página não tem card */
+  --card: oklch(0.975 0.014 92); /* #FBF7EC */
+  --card-foreground: oklch(0.243 0.005 95); /* #23231F */
+
+  /* Cor de ação — CTA sólido e seção 08 */
+  --primary: oklch(0.243 0.005 95); /* #23231F */
+  --primary-foreground: oklch(0.975 0.014 92); /* #FBF7EC */
+
+  --muted: oklch(0.933 0.006 92); /* #ECEAE4 — hover do waOutline */
+  --muted-foreground: oklch(0.514 0.008 95); /* #6B6B63 — texto de apoio */
+
+  /* Destaque, exclusivo de fundo escuro (CTA final) */
+  --accent: oklch(0.962 0.013 92); /* #F7F4EA */
+  --accent-foreground: oklch(0.243 0.005 95); /* #23231F */
+
+  --border: oklch(0.933 0.006 92); /* #ECEAE4 — linhas sobre branco */
+  --border-warm: oklch(0.925 0.018 92); /* #EAE5D7 — linhas sobre creme */
 }
 
 @layer base {

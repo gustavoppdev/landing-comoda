@@ -5,21 +5,9 @@
  * src/config.ts — nunca hardcode aqui.
  *
  * ───────────────────────────────────────────────────────────────────────────
- * ANTES DE USAR: o estilo do CTA mora em `ui/button.tsx`, não aqui.
- *
- * Acrescente ao cva do preset — as cores vêm de plan.md §1.5, as medidas de
- * plan.md §1.2. Os valores que o preset já tinha ficam intocados:
- *
- *   variant: {
- *     …                            // default, outline, secondary, ghost, …
- *     waSolid:    "bg-primary text-primary-foreground hover:bg-primary/90",
- *     waOutline:  "border border-border bg-transparent text-foreground hover:bg-muted",
- *     waInverted: "bg-accent text-accent-foreground hover:bg-accent/90",
- *   },
- *   size: {
- *     …                            // default, sm, lg, icon, …
- *     cta: "h-12 rounded-full px-6 text-body md:text-body-lg",
- *   },
+ * O estilo do CTA mora em `ui/button.tsx`, não aqui: as três ênfases de
+ * plan.md §1.5 são valores de `variant` e as medidas de plan.md §1.2 são o
+ * `size: cta`.
  *
  * Este componente não estiliza nada: ele escolhe. Concatenar cor ou altura por
  * fora do cva é o que fazia `bg-primary` (do variant default) e `bg-transparent`
@@ -80,6 +68,12 @@ interface WhatsappButtonProps {
   section: WhatsappSection;
   /** Ênfase visual, restrita às registradas em plan.md §1.5. */
   emphasis?: WhatsappButtonEmphasis;
+  /**
+   * O botão está sobre imagem (só o hero, plan.md §1.5)? Troca o fundo do
+   * `waSolid` de carvão para branco — a troca em si está no cva; aqui é só a
+   * escolha. Não é uma quarta ênfase: texto, altura, raio e ícone não mudam.
+   */
+  onMedia?: boolean;
   /** Ajuste de LAYOUT desta ocorrência (largura, margem). Nunca cor nem altura. */
   className?: string;
   /**
@@ -95,15 +89,17 @@ interface WhatsappButtonProps {
 export function WhatsappButton({
   section,
   emphasis = "waSolid",
+  onMedia = false,
   className,
   ariaLabel,
 }: WhatsappButtonProps) {
   // Os UTMs só existem no browser: o componente é pré-renderizado no build,
   // quando window ainda não existe. useSyncExternalStore é o jeito correto de
-  // ler valor externo com snapshot de servidor — no HTML estático o link sai sem
-  // UTM (certo para acesso direto) e passa a incluí-los na hidratação, sem o
-  // cascading render que useEffect + setState provoca (regra
-  // react-hooks/set-state-in-effect do eslint-config-next).
+  // ler valor externo com snapshot de servidor — no HTML estático eles saem
+  // vazios e passam a existir na hidratação, sem o cascading render que
+  // useEffect + setState provoca (regra react-hooks/set-state-in-effect do
+  // eslint-config-next). Eles vão só para o evento: o link nunca os carrega
+  // no texto da mensagem (plan.md §3).
   const search = useSyncExternalStore(
     subscribeToSearch,
     getSearchSnapshot,
@@ -124,10 +120,11 @@ export function WhatsappButton({
 
   return (
     <a
-      href={buildWhatsappLink(section, utm)}
+      href={buildWhatsappLink(section)}
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
+      data-on-media={onMedia ? "true" : undefined}
       aria-label={
         ariaLabel ?? `Falar com ${clientConfig.businessName} no WhatsApp`
       }

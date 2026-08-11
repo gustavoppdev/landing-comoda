@@ -18,9 +18,17 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
-        waSolid: "bg-primary text-primary-foreground hover:bg-primary/90",
+        // As três ênfases de plan.md §1.5 — nenhuma quarta.
+        //
+        // O `data-on-media` resolve os DOIS fundos do waSolid (carvão sobre
+        // creme nos pacotes e na barra fixa; branco sobre a foto do hero). São a
+        // mesma ênfase com token de fundo distinto, não duas ênfases — e a
+        // alternativa, mandar a classe de fundo pela seção, colocaria cor do CTA
+        // fora deste arquivo, que é o que o AGENTS.md §4 proíbe.
+        waSolid:
+          "bg-primary text-primary-foreground hover:bg-primary/90 data-[on-media=true]:bg-background data-[on-media=true]:text-foreground data-[on-media=true]:hover:bg-background/90",
         waOutline:
-          "border border-border bg-transparent text-foreground hover:bg-muted",
+          "border border-foreground bg-transparent text-foreground hover:bg-muted",
         waInverted: "bg-accent text-accent-foreground hover:bg-accent/90",
       },
       size: {
@@ -35,7 +43,9 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
-        cta: "h-12 rounded-full px-6 text-body md:text-body-lg",
+        // plan.md §1.2 — 52px de altura (o `lg` do preset tem 36px, abaixo do
+        // alvo de toque de 44px), raio 999px, padding 30px, Karla 500/15px.
+        cta: "h-13 gap-2.5 rounded-full px-7.5 text-cta",
       },
     },
     defaultVariants: {
