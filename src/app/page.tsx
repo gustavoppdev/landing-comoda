@@ -8,6 +8,7 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
+import { MobileCtaBar } from "@/components/MobileCtaBar";
 
 /**
  * Esqueleto da página — a ordem de spec.md §3, sem estilo.
@@ -32,6 +33,8 @@ export default function Home() {
         <FinalCta />
       </main>
       <Footer />
+      {/* Fora do <main> e depois do rodapé: é camada de ação, não conteúdo. */}
+      <MobileCtaBar />
     </>
   );
 }
