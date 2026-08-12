@@ -32,6 +32,32 @@
     padding-block: clamp(76px, 11vw, 132px);
   }
 
+  /* CTA final: a seção mais vazia da página, por decisão de ritmo
+     (plan.md §1.2, terceira exceção registrada). */
+  .section-block-cta {
+    padding-block: clamp(96px, 13vw, 160px);
+  }
+
+  /* ── Rodapé e barra fixa (plan.md §1.2, hi-fi, exceção 1 da spec.md §1) ──
+     O padding inferior do rodapé reserva os 72px da barra fixa (10 + 52 + 10)
+     mais a área segura do aparelho — sem isso a barra cobre a última linha do
+     rodapé no mobile. Acima de 900px a barra não existe, e o padding volta ao
+     do hi-fi. A media query mora aqui porque o JSX não expressa `env()`. */
+  .footer-block {
+    padding-block: clamp(36px, 5vw, 56px)
+      calc(clamp(64px, 9vw, 96px) + 72px + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 900px) {
+    .footer-block {
+      padding-block: clamp(36px, 5vw, 56px) clamp(64px, 9vw, 96px);
+    }
+  }
+
+  .wa-bar {
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  }
+
   /* ── Hero (plan.md §1.2 e §2) ───────────────────────────────────────────
      O hero tem padding vertical próprio: pouco no topo (o wordmark quase
      encosta na borda) e mais na base (o bloco de texto respira sobre o
@@ -135,6 +161,12 @@
   --text-price-tag--letter-spacing: 0.14em;
   --text-price-tag--font-weight: 400;
 
+  /* Nota e endereço do rodapé — 13px é a ÚNICA exceção ao piso de 14px do
+     corpo (plan.md §1.3), e vale só nesta faixa. */
+  --text-footnote: 0.8125rem; /* 13px */
+  --text-footnote--line-height: 1.7;
+  --text-footnote--font-weight: 300;
+
   /* Texto do CTA — plan.md §1.3, idêntico em mobile e desktop */
   --text-cta: 0.9375rem; /* 15px */
   --text-cta--line-height: 1;
@@ -147,6 +179,10 @@
 @theme inline {
   --font-display: var(--font-display);
   --color-border-warm: var(--border-warm);
+  --color-footer: var(--footer);
+  --color-footer-muted: var(--footer-muted);
+  --color-footer-note: var(--footer-note);
+  --color-on-dark-muted: var(--on-dark-muted);
 }
 
 @theme inline {
@@ -290,6 +326,19 @@
 
   --border: oklch(0.933 0.006 92); /* #ECEAE4 — linhas sobre branco */
   --border-warm: oklch(0.925 0.018 92); /* #EAE5D7 — linhas sobre creme */
+
+  /* ── Faixas escuras do fim da página (plan.md §2, "cores fora da paleta") ──
+     Em hex, e não em oklch, porque são as cores contra as quais o contraste da
+     slice-10 foi medido — o arredondamento oklch→sRGB das slices 4-7 moveria o
+     número medido.
+
+     `--footer-note` DIVERGE do hi-fi: lá a nota legal é #6F6D65, que mede
+     3,36:1 sobre o #1A1A17 e reprova AA no menor texto da página. #86837B
+     mede 4,61:1 e é o tom mais próximo que passa. */
+  --footer: #1a1a17; /* um degrau abaixo do --primary, separa rodapé do CTA final */
+  --footer-muted: #8a877d; /* endereço — 4,85:1 sobre --footer */
+  --footer-note: #86837b; /* nota legal — 4,61:1 sobre --footer */
+  --on-dark-muted: #a8a69c; /* apoio do CTA final e link do rodapé — 6,67:1 / 7,14:1 */
 }
 
 @layer base {
